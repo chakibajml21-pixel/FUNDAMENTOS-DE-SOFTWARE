@@ -1,65 +1,152 @@
-# Semana 6 — Modelado de sistemas (UML y patrones de diseño)
+# 🏦 Quantum Wallet - Semana 6
+## Implementación del Patrón de Diseño Singleton
 
-Esta semana **no programamos algo nuevo**: aprendemos a hacer los **planos** de nuestro
-software con **UML** (diagrama de clases) y aplicamos el patrón de diseño **Singleton**.
+### 📖 Descripción
 
-## Archivos
+Este proyecto implementa el **Patrón de Diseño Singleton** utilizando Python.
 
-| Archivo | Actividad | Para qué sirve |
-|---------|-----------|----------------|
-| [`usuarios.py`](./usuarios.py) | **Actividad 1** | Código de la *Quantum Wallet* que vas a traducir a un diagrama UML. |
-| [`banco_central.py`](./banco_central.py) | **Actividad 2** | Patrón **Singleton**: una única instancia del Banco Central. |
+El objetivo es demostrar cómo garantizar que una clase tenga **una única instancia** durante toda la ejecución del programa y que todos los objetos creados compartan la misma información.
 
----
-
-## Actividad 1 — Del código al plano (Quantum Wallet)
-
-Traduce `usuarios.py` a un **diagrama de clases UML** (en Draw.io, Lucidchart, etc.).
-
-**Mapa código → UML:**
-
-| En el código | En el UML |
-|--------------|-----------|
-| `class Wallet`, `class Usuario`, `class UsuarioEmpresa` | 3 cajas (rectángulos) |
-| `self.__saldo` (doble guion bajo) | atributo **privado** → `- saldo: float` |
-| `self.nombre` (simple) | atributo **público** → `+ nombre: str` |
-| `def consultar_saldo(self)` | método **público** → `+ consultar_saldo()` |
-| `class UsuarioEmpresa(Usuario)` | **herencia**: flecha con **triángulo hueco △** apuntando a `Usuario` |
-| `self.__wallet = Wallet()` dentro del `__init__` de `Usuario` | **composición**: línea con **rombo relleno ◆** en el extremo de `Usuario` |
-
-> El rombo es relleno (composición, no agregación) porque la `Wallet` **se crea dentro** del
-> `Usuario` y **no existe sin él**: si borras el `Usuario`, su `Wallet` desaparece.
-
-Métodos que deben aparecer: `Wallet` → `+consultar_saldo()`, `+recargar()`; `Usuario` →
-`+realizar_pago()`; `UsuarioEmpresa` → `+generar_factura()`.
+En este caso se desarrolló la clase **GestorBanco**, encargada de administrar la información general del sistema bancario, como clientes, cuentas y transacciones.
 
 ---
 
-## Actividad 2 — El patrón Singleton
+## Objetivo
 
-Un **patrón de diseño** es una solución estándar a un problema común (una plantilla, no código
-para copiar y pegar). El **Singleton** asegura que una clase tenga **una única instancia** y un
-punto de acceso global a ella.
+Aplicar el patrón de diseño **Singleton** para asegurar que exista un único administrador del sistema bancario, evitando la creación de múltiples objetos con información diferente.
 
-`banco_central.py` lo implementa con `__new__` (el método que **crea** el objeto, antes que
-`__init__`). Al ejecutarlo verás con `id()` que dos variables distintas son **el mismo objeto**:
+---
+
+## Estructura del proyecto
+
+```
+Semana_6/
+│
+├── banco_central.py
+└── README.md
+```
+
+---
+
+## Tecnologías utilizadas
+
+- Python 3
+- Programación Orientada a Objetos (POO)
+- Patrón de Diseño Singleton
+
+---
+
+## Funcionamiento
+
+La clase **GestorBanco** utiliza el método especial `__new__()` para controlar la creación de objetos.
+
+Cuando se intenta crear una nueva instancia:
+
+- Si no existe ninguna, se crea.
+- Si ya existe una instancia, simplemente se devuelve la misma.
+
+De esta forma todos los objetos apuntan al mismo espacio de memoria.
+
+---
+
+## Características
+
+- Solo existe una instancia del gestor del banco.
+- Administración centralizada de la información.
+- Registro de clientes.
+- Registro de cuentas.
+- Registro de transacciones.
+- Compartición de datos entre todas las referencias al objeto.
+
+---
+
+## Ejecución
+
+Desde la terminal, ubicarse en la carpeta del proyecto:
+
+```bash
+cd MisProyectosPython/Semana_6
+```
+
+Ejecutar:
 
 ```bash
 python banco_central.py
 ```
 
-Salida esperada (los dos `id()` son iguales):
-```
-id(banco_a): 1990...
-id(banco_b): 1990...
-Son el mismo objeto?: True
-El #100 es el mismo?: True
-Reservas totales (compartidas): 1500
+---
+
+## Ejemplo de salida
+
+```text
+ID del gestor1: 2384723894
+ID del gestor2: 2384723894
+¿Son el mismo objeto? True
+
+Cliente 'Carlos Gómez' registrado correctamente.
+Cliente 'Laura Martínez' registrado correctamente.
+
+Cuenta 1001 creada.
+Cuenta 1002 creada.
+
+========== RESUMEN DEL BANCO ==========
+Clientes registrados: 2
+Cuentas creadas: 2
+Transacciones realizadas: 2
 ```
 
-**Para el informe:** explica por qué en un sistema bancario es **peligroso NO** usar un Singleton
-para el gestor de la base de datos o el emisor de moneda (pista: saldos inconsistentes, dinero
-"duplicado", desperdicio de memoria).
+---
+
+## Explicación del Singleton
+
+El patrón Singleton garantiza que exista **una sola instancia** de una clase.
+
+En este proyecto:
+
+- `gestor1 = GestorBanco()`
+- `gestor2 = GestorBanco()`
+
+Aunque parecen dos objetos distintos, ambos hacen referencia al mismo objeto en memoria.
+
+Esto se puede comprobar con:
+
+```python
+print(gestor1 is gestor2)
+```
+
+Resultado:
+
+```text
+True
+```
+
+También ambos poseen el mismo identificador (`id()`), confirmando que son la misma instancia.
+
+---
+
+##  Conceptos aplicados
+
+- Clases
+- Objetos
+- Métodos especiales (`__new__`)
+- Atributos de clase
+- Encapsulamiento
+- Programación Orientada a Objetos
+- Patrón de Diseño Singleton
+
+---
+
+## Autor
+
+**Nombre:** Chakiba Jamal
+
+**Proyecto:** Quantum Wallet
+
+**Asignatura:** Fundamentos de Software
+
+**Semana:** 6
+
+**Tema:** Patrón de Diseño Singleton
 
 ---
 
